@@ -16,7 +16,7 @@ class Shell implements ShellInterface
      * @param string $command
      *
      * @return CommandResultInterface
-     * @throws CommandResultInterface
+     * @throws CommandResultException
      */
     public function exec($command)
     {
