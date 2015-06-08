@@ -11,6 +11,12 @@ class Shell implements ShellInterface
 
     private $count = 0;
     private $history = [];
+    private $execLambda;
+
+    public function __construct(callable $execLambda = null)
+    {
+        $this->execLambda = $execLambda ? $execLambda : $this->getDefaultExecLambda();
+    }
 
     /**
      * @param string $command
@@ -23,7 +29,8 @@ class Shell implements ShellInterface
         $output = [];
         $exit_code = null;
 
-        exec($command . ' 2>&1', $output, $exit_code);
+        $execLambda = $this->execLambda;
+        $execLambda($command . ' 2>&1', $output, $exit_code);
 
         $this->history[] = $command;
         $this->count = $this->count + 1;
@@ -63,4 +70,29 @@ class Shell implements ShellInterface
     {
         $this->history = [];
     }
+
+    /**
+     * @param callable $execLambda
+     */
+    public function setExecLambda(callable $execLambda)
+    {
+        $this->execLambda = $execLambda;
+    }
+
+    /**
+     * @return callable
+     */
+    protected function getDefaultExecLambda() {
+        /**
+         * @param $command
+         * @param array $output
+         * @param int|null $exit_code
+         *
+         * @return string
+         */
+        return function ($command, array &$output = [], &$exit_code = null) {
+            return exec($command, $output, $exit_code);
+        };
+    }
+
 }
