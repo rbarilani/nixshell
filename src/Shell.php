@@ -41,11 +41,8 @@ class Shell implements ShellInterface
         $output = [];
         $exit_code = null;
 
-
         $this->executor->exec($command, $output, $exit_code);
-
-        $this->history[] = $command;
-        $this->count = $this->count + 1;
+        $this->onExecutedCommand($command);
 
         if ($exit_code !== 0) {
             throw new ResultException($command, $output, $exit_code);
@@ -105,6 +102,17 @@ class Shell implements ShellInterface
     protected function createDefaultExecutor()
     {
         return new Executor();
+    }
+
+    /**
+     * On executed command callback
+     *
+     * @param $command
+     */
+    protected function onExecutedCommand($command)
+    {
+        $this->history[] = $command;
+        $this->count     = $this->count + 1;
     }
 
 }
