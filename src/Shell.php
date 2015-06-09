@@ -2,6 +2,8 @@
 
 namespace Nixshell;
 
+use Nixshell\Command\CommandExecutor;
+use Nixshell\Command\CommandExecutorInterface;
 use Nixshell\Command\CommandResult;
 use Nixshell\Command\CommandResultException;
 use Nixshell\Command\CommandResultInterface;
@@ -11,11 +13,11 @@ class Shell implements ShellInterface
 
     private $count = 0;
     private $history = [];
-    private $execLambda;
+    private $executor;
 
-    public function __construct(callable $execLambda = null)
+    public function __construct(CommandExecutorInterface $executor = null)
     {
-        $this->execLambda = $execLambda ? $execLambda : $this->getDefaultExecLambda();
+        $this->executor = $executor ? $executor : $this->getDefaultExecutor();
     }
 
     /**
@@ -29,8 +31,7 @@ class Shell implements ShellInterface
         $output = [];
         $exit_code = null;
 
-        $execLambda = $this->execLambda;
-        $execLambda($command . ' 2>&1', $output, $exit_code);
+        $this->executor->exec($command . ' 2>&1', $output, $exit_code);
 
         $this->history[] = $command;
         $this->count = $this->count + 1;
@@ -72,27 +73,18 @@ class Shell implements ShellInterface
     }
 
     /**
-     * @param callable $execLambda
+     * @param CommandExecutorInterface $executor
      */
-    public function setExecLambda(callable $execLambda)
+    public function setExecutor(CommandExecutorInterface $executor)
     {
-        $this->execLambda = $execLambda;
+        $this->executor = $executor;
     }
 
     /**
-     * @return callable
+     * @return CommandExecutorInterface
      */
-    protected function getDefaultExecLambda() {
-        /**
-         * @param $command
-         * @param array $output
-         * @param int|null $exit_code
-         *
-         * @return string
-         */
-        return function ($command, array &$output = [], &$exit_code = null) {
-            return exec($command, $output, $exit_code);
-        };
+    protected function getDefaultExecutor() {
+        return new CommandExecutor();
     }
 
 }

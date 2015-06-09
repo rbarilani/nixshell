@@ -10,3 +10,5 @@ $ php composer.phar install
 EOT
 );
 }
+
+$loader->setPsr4("Nixshell\\Tests\\", __DIR__ );

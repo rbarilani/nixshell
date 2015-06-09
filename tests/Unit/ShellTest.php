@@ -4,6 +4,7 @@ namespace Nixshell\Tests\Unit;
 use Nixshell\Command\CommandResultException;
 use Nixshell\Command\CommandResultInterface;
 use Nixshell\Shell;
+use Nixshell\Tests\CommonTestHelperTrait;
 
 /**
  * Class ShellTest
@@ -11,6 +12,8 @@ use Nixshell\Shell;
  */
 class ShellTest extends \PHPUnit_Framework_TestCase
 {
+    use CommonTestHelperTrait;
+
     /**
      * @var Shell
      */
@@ -23,34 +26,38 @@ class ShellTest extends \PHPUnit_Framework_TestCase
 
     public function testExec()
     {
-        $command = 'foo';
-        $execLambdaStub = function ($command, &$output, &$exit_code) {
-            $output = [];
-            $exit_code = 0;
-            $this->assertEquals('foo 2>&1', $command);
-        };
+        $executorStub = $this->getMock($this->getPsr4FullName('Command\CommandExecutorInterface'));
+        $executorStub
+            ->expects($this->once())
+            ->method('exec')
+            ->with('foo 2>&1', [], null)
+            ->willReturnCallback(function ($command, &$output = [], &$exit_code = null) {
+                $output = [];
+                $exit_code = 0;
+            });
+        $this->shell->setExecutor($executorStub);
 
-        $this->shell->setExecLambda($execLambdaStub);
-
-        $result = $this->shell->exec($command);
-        $this->assertTrue($result instanceof CommandResultInterface);
+        $this->assertTrue($this->shell->exec('foo') instanceof CommandResultInterface);
     }
 
     public function testExecThrowsAnException()
     {
-        $command = 'foo';
-
-        $execLambdaStub = function ($command, &$output, &$exit_code) {
-            $output = ['foo doesn\'t exists'];
-            $exit_code = 1;
-        };
-
-        $this->shell->setExecLambda($execLambdaStub);
+        $executorStub = $this->getMock($this->getPsr4FullName('Command\CommandExecutorInterface'));
+        $executorStub
+            ->expects($this->once())
+            ->method('exec')
+            ->with('foo 2>&1')
+            ->willReturnCallback(function ($command, &$output = [], &$exit_code = null) {
+                $output = ['foo doesn\'t exist'];
+                $exit_code = 1;
+            });
+        $this->shell->setExecutor($executorStub);
 
         try{
-            $this->shell->exec($command);
+            $this->shell->exec('foo');
         }catch (CommandResultException $e) {
-            $this->assertEquals(['foo doesn\'t exists'], $e->getOutput());
+            $this->assertInstanceOf($this->getPsr4FullName('Command\CommandResultInterface'), $e);
+            $this->assertEquals(['foo doesn\'t exist'], $e->getOutput());
             return;
         }
 
