@@ -36,8 +36,8 @@ class ShellTest extends \PHPUnit_Framework_TestCase
      */
     public function testExec($command, array $stubOutput = [], $stubExitCode = 0)
     {
-        $executorStub = $this->getExecutorBaseStub($command);
-        $executorStub
+        $executorMock = $this->getExecutorMock();
+        $executorMock
             ->expects($this->once())
             ->method('exec')
             ->with($command)
@@ -45,7 +45,7 @@ class ShellTest extends \PHPUnit_Framework_TestCase
                 $output = $stubOutput;
                 $exit_code = $stubExitCode;
             });
-        $this->shell->setExecutor($executorStub);
+        $this->shell->setExecutor($executorMock);
 
         $result = $this->shell->exec($command);
         $this->assertTrue($result instanceof ResultInterface);
@@ -65,7 +65,7 @@ class ShellTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($output, $result->getOutput());
         $this->assertEquals(0, $result->getExitCode());
     }
-
+    
     public function execDataProvider()
     {
         return [
@@ -81,8 +81,8 @@ class ShellTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecThrowsAnException($command, array $stubOutput = [])
     {
-        $executorStub = $this->getExecutorBaseStub($command);
-        $executorStub
+        $executorMock = $this->getExecutorMock();
+        $executorMock
             ->expects($this->once())
             ->method('exec')
             ->with($command)
@@ -90,7 +90,7 @@ class ShellTest extends \PHPUnit_Framework_TestCase
                 $output = $stubOutput;
                 $exit_code = 1;
             });
-        $this->shell->setExecutor($executorStub);
+        $this->shell->setExecutor($executorMock);
 
         try{
             $this->shell->exec($command);
@@ -125,13 +125,13 @@ class ShellTest extends \PHPUnit_Framework_TestCase
 
     public function testExecExecutorNotEnabledException()
     {
-        $executorStub = $this->getExecutorBaseStub('ls', false);
+        $executorMock = $this->getExecutorMock(false);
 
-        $executorStub
+        $executorMock
             ->expects($this->never())
             ->method('exec');
 
-        $this->shell->setExecutor($executorStub);
+        $this->shell->setExecutor($executorMock);
 
         try{
             $this->shell->exec('ls');

@@ -19,21 +19,20 @@ trait TestHelperTrait
     }
 
     /**
-     * @param string $command
      * @param bool $enabled
      * @return ExecutorInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected function getExecutorBaseStub($command, $enabled = true)
+    protected function getExecutorMock($enabled = true)
     {
         /**
          * @var $this TestHelperTrait|\PHPUnit_Framework_TestCase
          */
-        $executorStub = $this->getMock($this->getPsr4FullName('Command\ExecutorInterface'));
-        $executorStub
+        $mock = $this->getMock($this->getPsr4FullName('Command\ExecutorInterface'));
+        $mock
             ->expects($this->once())
             ->method('isEnabled')
             ->willReturn($enabled);
 
-        return $executorStub;
+        return $mock;
     }
 }
