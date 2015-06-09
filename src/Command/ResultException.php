@@ -15,11 +15,11 @@ class ResultException extends \Exception implements ResultInterface
 
     /**
      * @param string $command
-     * @param int $output
-     * @param \Exception $exit_code
+     * @param array $output
+     * @param int $exit_code
      * @param \Exception $previous
      */
-    public function __construct($command, $output, $exit_code, \Exception $previous = NULL)
+    public function __construct($command, array $output, $exit_code, \Exception $previous = NULL)
     {
         $this->command = $command;
         $this->output = $output;
