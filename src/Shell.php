@@ -107,7 +107,7 @@ class Shell implements ShellInterface
     /**
      * On executed command callback
      *
-     * @param $command
+     * @param string $command
      */
     protected function onExecutedCommand($command)
     {
