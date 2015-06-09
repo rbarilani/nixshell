@@ -25,18 +25,18 @@
     </php>
 
 
-    <!--<logging>-->
-        <!--<log type="coverage-clover" target="build/logs/clover-coverage.xml"/>-->
-        <!--<log type="coverage-html"-->
-             <!--target="build/coverage"-->
-             <!--title="rbarilani/nixshell test suite"-->
-             <!--charset="UTF-8"-->
-             <!--yui="true"-->
-             <!--highlight="true"-->
-             <!--lowUpperBound="35"-->
-             <!--highLowerBound="70"-->
-            <!--/>-->
-    <!--</logging>-->
+    <logging>
+        <log type="coverage-clover" target="build/logs/clover-coverage.xml"/>
+        <log type="coverage-html"
+             target="build/coverage"
+             title="nixshell test suite"
+             charset="UTF-8"
+             yui="true"
+             highlight="true"
+             lowUpperBound="35"
+             highLowerBound="70"
+                />
+    </logging>
 
 
     <filter>

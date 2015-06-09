@@ -122,5 +122,39 @@ class ShellTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    public function testGetCount()
+    {
+        $this->testExec('ls');
+        $this->testExecExceptionResult('cat d');
+        $this->assertEquals(2, $this->shell->getCount());
+    }
+
+    public function testGetHistory()
+    {
+        $this->testExec('ls');
+        $this->testExecExceptionResult('cat d');
+        $this->assertEquals(['ls','cat d'], $this->shell->getHistory());
+    }
+
+    public function testGetHistorySlice()
+    {
+        $this->testExec('ls');
+        $this->testExecExceptionResult('cat d');
+        $this->testExecExceptionResult('vi conf');
+        $this->testExec('echo hello');
+
+        $this->assertEquals(['vi conf','echo hello'], $this->shell->getHistory(2));
+    }
+
+    public function testClearHistory()
+    {
+        $this->testExec('ls');
+        $this->testExecExceptionResult('cat d');
+        $this->assertNotEmpty($this->shell->getHistory());
+
+        $this->shell->clearHistory();
+
+        $this->assertEmpty($this->shell->getHistory());
+    }
 
 }
