@@ -1,5 +1,6 @@
 {
     "name": "rbarilani/nixshell",
+    "description": "A minimalistic php object oriented ```exec``` wrap.",
     "authors": [
         {
             "name": "Ruben Barilani",
