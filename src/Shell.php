@@ -17,7 +17,7 @@ class Shell implements ShellInterface
 
     public function __construct(CommandExecutorInterface $executor = null)
     {
-        $this->executor = $executor ? $executor : $this->getDefaultExecutor();
+        $this->executor = $executor ? $executor : $this->createDefaultExecutor();
     }
 
     /**
@@ -31,7 +31,7 @@ class Shell implements ShellInterface
         $output = [];
         $exit_code = null;
 
-        $this->executor->exec($command . ' 2>&1', $output, $exit_code);
+        $this->executor->exec('(' . $command . ')' .' 2>&1', $output, $exit_code);
 
         $this->history[] = $command;
         $this->count = $this->count + 1;
@@ -83,7 +83,7 @@ class Shell implements ShellInterface
     /**
      * @return CommandExecutorInterface
      */
-    protected function getDefaultExecutor() {
+    protected function createDefaultExecutor() {
         return new CommandExecutor();
     }
 
