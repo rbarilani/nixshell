@@ -2,10 +2,10 @@
 
 namespace Nixshell\Command;
 
-class CommandResultException extends \Exception implements CommandResultInterface
+class ResultException extends \Exception implements ResultInterface
 {
 
-    use CommandResultTrait;
+    use ResultTrait;
 
     public function __construct($command, $output, $exit_code, \Exception $previous = NULL)
     {

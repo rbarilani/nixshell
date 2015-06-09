@@ -2,7 +2,7 @@
 
 namespace Nixshell;
 
-use Nixshell\Command\CommandResultInterface;
+use Nixshell\Command\ResultInterface;
 
 interface ShellInterface
 {
@@ -10,7 +10,7 @@ interface ShellInterface
     /**
      * @param string $command
      *
-     * @return CommandResultInterface
+     * @return ResultInterface
      */
     public function exec($command);
 

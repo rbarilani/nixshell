@@ -3,7 +3,7 @@
 namespace Nixshell\Tests;
 
 
-trait CommonTestHelperTrait
+trait TestHelperTrait
 {
     private $psr4namespace = "Nixshell\\";
 

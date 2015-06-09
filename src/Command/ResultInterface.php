@@ -2,7 +2,7 @@
 
 namespace Nixshell\Command;
 
-interface CommandResultInterface
+interface ResultInterface
 {
     public function getExitCode();
 

@@ -1,10 +1,10 @@
 <?php
 
 namespace Nixshell\Tests\Unit;
-use Nixshell\Command\CommandResultException;
-use Nixshell\Command\CommandResultInterface;
+use Nixshell\Command\ResultException;
+use Nixshell\Command\ResultInterface;
 use Nixshell\Shell;
-use Nixshell\Tests\CommonTestHelperTrait;
+use Nixshell\Tests\TestHelperTrait;
 
 /**
  * Class ShellTest
@@ -12,7 +12,7 @@ use Nixshell\Tests\CommonTestHelperTrait;
  */
 class ShellTest extends \PHPUnit_Framework_TestCase
 {
-    use CommonTestHelperTrait;
+    use TestHelperTrait;
 
     /**
      * @var Shell
@@ -30,12 +30,12 @@ class ShellTest extends \PHPUnit_Framework_TestCase
      * @param $command
      * @param array $stubOutput
      * @param int $stubExitCode
-     * @return CommandResultInterface
-     * @throws CommandResultException
+     * @return ResultInterface
+     * @throws ResultException
      */
     public function testExec($command, array $stubOutput = [], $stubExitCode = 0)
     {
-        $executorStub = $this->getMock($this->getPsr4FullName('Command\CommandExecutorInterface'));
+        $executorStub = $this->getMock($this->getPsr4FullName('Command\ExecutorInterface'));
         $executorStub
             ->expects($this->once())
             ->method('exec')
@@ -47,7 +47,7 @@ class ShellTest extends \PHPUnit_Framework_TestCase
         $this->shell->setExecutor($executorStub);
 
         $result = $this->shell->exec($command);
-        $this->assertTrue($result instanceof CommandResultInterface);
+        $this->assertTrue($result instanceof ResultInterface);
 
         return $result;
     }
@@ -76,11 +76,11 @@ class ShellTest extends \PHPUnit_Framework_TestCase
      * @dataProvider execExceptionDataProvider
      * @param string $command
      * @param array $stubOutput
-     * @return \Exception|CommandResultException
+     * @return \Exception|ResultException
      */
     public function testExecThrowsAnException($command, array $stubOutput = [])
     {
-        $executorStub = $this->getMock($this->getPsr4FullName('Command\CommandExecutorInterface'));
+        $executorStub = $this->getMock($this->getPsr4FullName('Command\ExecutorInterface'));
         $executorStub
             ->expects($this->once())
             ->method('exec')
@@ -93,13 +93,13 @@ class ShellTest extends \PHPUnit_Framework_TestCase
 
         try{
             $this->shell->exec($command);
-        }catch (CommandResultException $e) {
-            $this->assertInstanceOf($this->getPsr4FullName('Command\CommandResultInterface'), $e);
+        }catch (ResultException $e) {
+            $this->assertInstanceOf($this->getPsr4FullName('Command\ResultInterface'), $e);
             $this->assertEquals($stubOutput, $e->getOutput());
             return $e;
         }
 
-        $this->fail('It should throws a CommandResultException');
+        $this->fail('It should throws a ResultException');
     }
 
     /**

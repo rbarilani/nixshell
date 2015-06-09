@@ -2,11 +2,11 @@
 
 namespace Nixshell;
 
-use Nixshell\Command\CommandExecutor;
-use Nixshell\Command\CommandExecutorInterface;
-use Nixshell\Command\CommandResult;
-use Nixshell\Command\CommandResultException;
-use Nixshell\Command\CommandResultInterface;
+use Nixshell\Command\Executor;
+use Nixshell\Command\ExecutorInterface;
+use Nixshell\Command\Result;
+use Nixshell\Command\ResultException;
+
 
 class Shell implements ShellInterface
 {
@@ -15,7 +15,7 @@ class Shell implements ShellInterface
     private $history = [];
     private $executor;
 
-    public function __construct(CommandExecutorInterface $executor = null)
+    public function __construct(ExecutorInterface $executor = null)
     {
         $this->executor = $executor ? $executor : $this->createDefaultExecutor();
     }
@@ -23,8 +23,8 @@ class Shell implements ShellInterface
     /**
      * @param string $command
      *
-     * @return CommandResultInterface
-     * @throws CommandResultException
+     * @return Result
+     * @throws ResultException
      */
     public function exec($command)
     {
@@ -37,9 +37,9 @@ class Shell implements ShellInterface
         $this->count = $this->count + 1;
 
         if ($exit_code !== 0) {
-            throw new CommandResultException($command, $output, $exit_code);
+            throw new ResultException($command, $output, $exit_code);
         }
-        return new CommandResult($command, $output, $exit_code);
+        return new Result($command, $output, $exit_code);
     }
 
     /**
@@ -73,18 +73,19 @@ class Shell implements ShellInterface
     }
 
     /**
-     * @param CommandExecutorInterface $executor
+     * @param ExecutorInterface $executor
      */
-    public function setExecutor(CommandExecutorInterface $executor)
+    public function setExecutor(ExecutorInterface $executor)
     {
         $this->executor = $executor;
     }
 
     /**
-     * @return CommandExecutorInterface
+     * @return ExecutorInterface
      */
-    protected function createDefaultExecutor() {
-        return new CommandExecutor();
+    protected function createDefaultExecutor()
+    {
+        return new Executor();
     }
 
 }

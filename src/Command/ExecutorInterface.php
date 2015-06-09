@@ -2,7 +2,7 @@
 
 namespace Nixshell\Command;
 
-interface CommandExecutorInterface
+interface ExecutorInterface
 {
     /**
      * @param string $command

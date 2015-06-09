@@ -2,7 +2,7 @@
 
 namespace Nixshell\Command;
 
-trait CommandResultTrait
+trait ResultTrait
 {
     private $exit_code;
     private $output;

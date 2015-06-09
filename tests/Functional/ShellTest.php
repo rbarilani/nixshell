@@ -1,8 +1,8 @@
 <?php
 
 namespace Nixshell\Tests\Functional;
-use Nixshell\Command\CommandResultException;
-use Nixshell\Command\CommandResultInterface;
+use Nixshell\Command\ResultException;
+use Nixshell\Command\ResultInterface;
 use Nixshell\Shell;
 use Nixshell\ShellInterface;
 
@@ -26,7 +26,7 @@ class ShellTest extends \PHPUnit_Framework_TestCase
     {
         $command = 'ls *.json';
         $result = $this->shell->exec($command);
-        $this->assertTrue($result instanceof CommandResultInterface);
+        $this->assertTrue($result instanceof ResultInterface);
     }
 
     /**
@@ -40,7 +40,7 @@ class ShellTest extends \PHPUnit_Framework_TestCase
     {
         try{
             $result = $this->shell->exec($command);
-        }catch (CommandResultException $e) {
+        }catch (ResultException $e) {
             $result = $e;
         }
 

@@ -3,7 +3,7 @@
 namespace Nixshell\Command;
 
 
-class CommandExecutor implements CommandExecutorInterface
+class Executor implements ExecutorInterface
 {
 
     /**
