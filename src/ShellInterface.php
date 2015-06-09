@@ -4,6 +4,10 @@ namespace Nixshell;
 
 use Nixshell\Command\ResultInterface;
 
+/**
+ * Interface ShellInterface
+ * @package Nixshell
+ */
 interface ShellInterface
 {
 

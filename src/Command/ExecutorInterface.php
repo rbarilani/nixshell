@@ -2,9 +2,17 @@
 
 namespace Nixshell\Command;
 
+/**
+ * Represents an object that is able to execute commands
+ *
+ * Interface ExecutorInterface
+ * @package Nixshell\Command
+ */
 interface ExecutorInterface
 {
     /**
+     * Execute a OS command
+     *
      * @param string $command
      * @param array $output
      * @param int|null $exit_code

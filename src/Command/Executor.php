@@ -3,10 +3,17 @@
 namespace Nixshell\Command;
 
 
+/**
+ * Default executor that wraps php exec function
+ *
+ * Class Executor
+ * @package Nixshell\Command
+ */
 class Executor implements ExecutorInterface
 {
-
     /**
+     * Execute a OS command
+     *
      * @param string $command
      * @param array $output
      * @param int|null $exit_code
@@ -14,6 +21,7 @@ class Executor implements ExecutorInterface
      */
     public function exec($command, array &$output = [], &$exit_code = null)
     {
-        return exec($command, $output, $exit_code);
+        // wraps command into rounded parenthesis to redirect the output (stderror to stdout)
+        return exec('(' . $command . ')' .' 2>&1', $output, $exit_code);
     }
 }

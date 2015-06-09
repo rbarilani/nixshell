@@ -39,7 +39,7 @@ class ShellTest extends \PHPUnit_Framework_TestCase
         $executorStub
             ->expects($this->once())
             ->method('exec')
-            ->with('('.$command.') 2>&1')
+            ->with($command)
             ->willReturnCallback(function ($command, &$output = [], &$exit_code = null) use ($stubOutput, $stubExitCode){
                 $output = $stubOutput;
                 $exit_code = $stubExitCode;
@@ -84,7 +84,7 @@ class ShellTest extends \PHPUnit_Framework_TestCase
         $executorStub
             ->expects($this->once())
             ->method('exec')
-            ->with('('. $command. ') 2>&1')
+            ->with($command)
             ->willReturnCallback(function ($command, &$output = [], &$exit_code = null) use ($stubOutput) {
                 $output = $stubOutput;
                 $exit_code = 1;

@@ -8,6 +8,10 @@ use Nixshell\Command\Result;
 use Nixshell\Command\ResultException;
 
 
+/**
+ * Class Shell
+ * @package Nixshell
+ */
 class Shell implements ShellInterface
 {
 
@@ -15,12 +19,18 @@ class Shell implements ShellInterface
     private $history = [];
     private $executor;
 
+    /**
+     * @param null|ExecutorInterface $executor
+     */
     public function __construct(ExecutorInterface $executor = null)
     {
+        // optionally inject the executor, if null use the default one
         $this->executor = $executor ? $executor : $this->createDefaultExecutor();
     }
 
     /**
+     * {@inheritdoc}
+     *
      * @param string $command
      *
      * @return Result
@@ -31,7 +41,8 @@ class Shell implements ShellInterface
         $output = [];
         $exit_code = null;
 
-        $this->executor->exec('(' . $command . ')' .' 2>&1', $output, $exit_code);
+
+        $this->executor->exec($command, $output, $exit_code);
 
         $this->history[] = $command;
         $this->count = $this->count + 1;
@@ -43,6 +54,8 @@ class Shell implements ShellInterface
     }
 
     /**
+     * {@inheritdoc}
+     *
      * @return int
      */
     public function getCount()
@@ -65,6 +78,8 @@ class Shell implements ShellInterface
     }
 
     /**
+     * {@inheritdoc}
+     *
      * @return void
      */
     public function clearHistory()
@@ -73,6 +88,8 @@ class Shell implements ShellInterface
     }
 
     /**
+     * Inject the executor
+     *
      * @param ExecutorInterface $executor
      */
     public function setExecutor(ExecutorInterface $executor)
@@ -81,6 +98,8 @@ class Shell implements ShellInterface
     }
 
     /**
+     * Instantiate the default executor
+     *
      * @return ExecutorInterface
      */
     protected function createDefaultExecutor()
