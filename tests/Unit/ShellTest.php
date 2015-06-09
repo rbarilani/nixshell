@@ -1,6 +1,7 @@
 <?php
 
 namespace Nixshell\Tests\Unit;
+use Nixshell\Command\ExecutorNotEnabledException;
 use Nixshell\Command\ResultException;
 use Nixshell\Command\ResultInterface;
 use Nixshell\Shell;
@@ -35,7 +36,7 @@ class ShellTest extends \PHPUnit_Framework_TestCase
      */
     public function testExec($command, array $stubOutput = [], $stubExitCode = 0)
     {
-        $executorStub = $this->getMock($this->getPsr4FullName('Command\ExecutorInterface'));
+        $executorStub = $this->getExecutorBaseStub($command);
         $executorStub
             ->expects($this->once())
             ->method('exec')
@@ -80,7 +81,7 @@ class ShellTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecThrowsAnException($command, array $stubOutput = [])
     {
-        $executorStub = $this->getMock($this->getPsr4FullName('Command\ExecutorInterface'));
+        $executorStub = $this->getExecutorBaseStub($command);
         $executorStub
             ->expects($this->once())
             ->method('exec')
@@ -120,6 +121,27 @@ class ShellTest extends \PHPUnit_Framework_TestCase
         return [
             ['foo', ['foo doesn\'t exist']]
         ];
+    }
+
+    public function testExecExecutorNotEnabledException()
+    {
+        $executorStub = $this->getExecutorBaseStub('ls', false);
+
+        $executorStub
+            ->expects($this->never())
+            ->method('exec');
+
+        $this->shell->setExecutor($executorStub);
+
+        try{
+            $this->shell->exec('ls');
+        }catch (ExecutorNotEnabledException $e) {
+            $this->assertRegExp('/^executor \"Mock_ExecutorInterface_.*\" is not enabled/', $e->getMessage());
+            $this->assertInstanceOf($this->getPsr4FullName('Command\ResultInterface'), $e);
+            return $e;
+        }
+
+        $this->fail('It should throws a ExecutorNotEnabledException');
     }
 
     public function testGetCount()

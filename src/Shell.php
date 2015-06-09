@@ -4,6 +4,7 @@ namespace Nixshell;
 
 use Nixshell\Command\Executor;
 use Nixshell\Command\ExecutorInterface;
+use Nixshell\Command\ExecutorNotEnabledException;
 use Nixshell\Command\Result;
 use Nixshell\Command\ResultException;
 
@@ -41,12 +42,17 @@ class Shell implements ShellInterface
         $output = [];
         $exit_code = null;
 
+        if($this->executor->isEnabled() === false) {
+            throw new ExecutorNotEnabledException($command, $this->executor);
+        }
+
         $this->executor->exec($command, $output, $exit_code);
         $this->onExecutedCommand($command);
 
         if ($exit_code !== 0) {
             throw new ResultException($command, $output, $exit_code);
         }
+
         return new Result($command, $output, $exit_code);
     }
 

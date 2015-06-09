@@ -24,4 +24,13 @@ class Executor implements ExecutorInterface
         // wraps command into rounded parenthesis to redirect the output (stderror to stdout)
         return exec('(' . $command . ')' .' 2>&1', $output, $exit_code);
     }
+
+    /**
+     * @return bool
+     */
+    public function isEnabled()
+    {
+        $disabled = explode(', ', ini_get('disable_functions'));
+        return !in_array('exec', $disabled);
+    }
 }

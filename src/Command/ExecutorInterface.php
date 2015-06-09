@@ -19,4 +19,10 @@ interface ExecutorInterface
      * @return mixed
      */
     public function exec($command, array &$output = [], &$exit_code = null);
+
+    /**
+     * Check if the current executor is enabled (can do the job)
+     * @return bool
+     */
+    public function isEnabled();
 }
