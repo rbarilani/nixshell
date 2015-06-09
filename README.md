@@ -30,7 +30,7 @@ Adds this to your composer.json and run ```composer update rbarilani/nixshell```
 require_once ('vendor/autoload.php');
 
 use Nixshell\Shell;
-use Nixshell\Command\ResultException;
+use Nixshell\ExecException;
 
 $shell  = new Shell();
 
@@ -45,7 +45,7 @@ $result->getOutput();   // ["dir1","dir2","etc"]
 try {
     $shell->exec('cat not-existent-file');
 
-}catch(ResultException $e) {
+}catch(ExecException $e) {
 
     $e->getExitCode(); // 1
     $e->getMessage();  // "cat: not-existent-file: No such file or directory (executed:'cat not-existent-file', exit code:1)"

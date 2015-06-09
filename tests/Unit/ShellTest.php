@@ -4,6 +4,7 @@ namespace Nixshell\Tests\Unit;
 use Nixshell\Command\ExecutorNotEnabledException;
 use Nixshell\Command\ResultException;
 use Nixshell\Command\ResultInterface;
+use Nixshell\ExecException;
 use Nixshell\Shell;
 use Nixshell\Tests\TestHelperTrait;
 
@@ -77,7 +78,7 @@ class ShellTest extends \PHPUnit_Framework_TestCase
      * @dataProvider execExceptionDataProvider
      * @param string $command
      * @param array $stubOutput
-     * @return \Exception|ResultException
+     * @return \Exception|\Nixshell\ExecException
      */
     public function testExecThrowsAnException($command, array $stubOutput = [])
     {
@@ -94,7 +95,7 @@ class ShellTest extends \PHPUnit_Framework_TestCase
 
         try{
             $this->shell->exec($command);
-        }catch (ResultException $e) {
+        }catch (ExecException $e) {
             $this->assertInstanceOf($this->getPsr4FullName('Command\ResultInterface'), $e);
             $this->assertEquals($stubOutput, $e->getOutput());
             return $e;

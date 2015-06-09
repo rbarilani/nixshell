@@ -2,12 +2,13 @@
 
 namespace Nixshell\Command;
 
+use Nixshell\ExecException;
 
 /**
  * Class ExecutorNotEnabledException
  * @package Nixshell\Command
  */
-class ExecutorNotEnabledException extends ResultException
+class ExecutorNotEnabledException extends ExecException
 {
     public function __construct($command, ExecutorInterface $executor)
     {

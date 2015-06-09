@@ -10,11 +10,12 @@ use Nixshell\Command\ResultInterface;
  */
 interface ShellInterface
 {
-
     /**
-     * @param string $command
+     * Execute an external command
      *
+     * @param string $command
      * @return ResultInterface
+     * @throws ExecException
      */
     public function exec($command);
 
