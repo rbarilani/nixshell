@@ -52,9 +52,6 @@ try {
     $e->getOutput();   // [""cat: not-existent-file: No such file or directory"]
 }
 
-// count 
-$shell->getCount(); // 2
-
 // history
 $shell->getHistory(); // ["ls","cat not-existent-file"]
 

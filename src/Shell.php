@@ -15,8 +15,6 @@ use Nixshell\Command\ResultException;
  */
 class Shell implements ShellInterface
 {
-
-    private $count = 0;
     private $history = [];
     private $executor;
 
@@ -54,16 +52,6 @@ class Shell implements ShellInterface
         }
 
         return new Result($command, $output, $exit_code);
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @return int
-     */
-    public function getCount()
-    {
-        return $this->count;
     }
 
     /**
@@ -118,7 +106,6 @@ class Shell implements ShellInterface
     protected function onExecutedCommand($command)
     {
         $this->history[] = $command;
-        $this->count     = $this->count + 1;
     }
 
 }

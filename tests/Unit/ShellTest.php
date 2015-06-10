@@ -145,13 +145,6 @@ class ShellTest extends \PHPUnit_Framework_TestCase
         $this->fail('It should throws a ExecutorNotEnabledException');
     }
 
-    public function testGetCount()
-    {
-        $this->testExec('ls');
-        $this->testExecExceptionResult('cat d');
-        $this->assertEquals(2, $this->shell->getCount());
-    }
-
     public function testGetHistory()
     {
         $this->testExec('ls');

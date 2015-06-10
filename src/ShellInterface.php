@@ -20,13 +20,6 @@ interface ShellInterface
     public function exec($command);
 
     /**
-     * Return number of commands executed by this shell
-     *
-     * @return int
-     */
-    public function getCount();
-
-    /**
      * Return a list of commands executed by this shell
      *
      * @param int $n - return only a list of last $n commands
@@ -36,7 +29,7 @@ interface ShellInterface
     public function getHistory($n = 0);
 
     /**
-     * Clear history
+     * Removes all history entries
      *
      * @return void
      */
